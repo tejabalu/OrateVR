@@ -4,3 +4,4 @@ venv
 .env
 settings.json
 SAK.json
+.idea

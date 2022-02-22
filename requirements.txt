@@ -5,3 +5,4 @@ matplotlib
 heartpy
 firebase
 firebase_admin
+gunicorn

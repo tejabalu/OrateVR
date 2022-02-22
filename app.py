@@ -1,6 +1,6 @@
 import dash
-from dash import dcc
-from dash import html
+import dash_core_components as dcc
+import dash_html_components as html
 from dash.dependencies import Input, Output, State
 from engine import export_dataframe
 
@@ -104,7 +104,6 @@ app.layout = html.Div(
 )
 
 
-
 @app.callback(
     Output("heart-rate", "figure"), [Input("heart-rate-update", "n_intervals")]
 )
@@ -129,7 +128,7 @@ def gen_heart_rate(interval):
         font={"color": "#fff"},
         height=700,
         xaxis={
-            "range": [175,0],
+            "range": [175, 0],
             "showline": True,
             "zeroline": False,
             "fixedrange": False,
@@ -141,6 +140,7 @@ def gen_heart_rate(interval):
 
     return dict(data=[trace], layout=layout)
 
+
 @app.callback(
     Output("gsr-reading-graph", "figure"),
     [Input("heart-rate-update", "n_intervals")],
@@ -148,7 +148,7 @@ def gen_heart_rate(interval):
         State("heart-rate", "figure"),
     ],
 )
-def gen_wind_histogram(a,b):
+def gen_wind_histogram(a, b):
     trace = dict(
         type="scatter",
         y=dfi["gsrdetect"],
@@ -163,7 +163,7 @@ def gen_wind_histogram(a,b):
         font={"color": "#fff"},
         height=700,
         xaxis={
-            "range": [100,0],
+            "range": [100, 0],
             "showline": True,
             "zeroline": False,
             "fixedrange": False,
@@ -174,6 +174,7 @@ def gen_wind_histogram(a,b):
     )
 
     return dict(data=[trace], layout=layout)
+
 
 if __name__ == "__main__":
     app.run_server(debug=True)

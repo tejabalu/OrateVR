@@ -1,10 +1,10 @@
-import heartpy as hp
-import matplotlib.pyplot as plt
+# import heartpy as hp
+# import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import firebase_admin
 import datetime
-import google.cloud
+# import google.cloud
 from firebase_admin import credentials
 from firebase_admin import db
 
@@ -22,7 +22,7 @@ def export_dataframe():
     df.reset_index(drop=True, inplace=True)
     keys = np.array(list(df["data"][0].keys()))
 
-    dfi = pd.DataFrame(columns=keys)
+    dfi = pd.DataFrame(columns=keys, dtype=np.float64)
     df['data'][0].values()
 
     for i in range(len(df["data"])):
@@ -31,5 +31,3 @@ def export_dataframe():
     dfi["formatted_time"] = dfi["Ts"].apply(lambda x: datetime.datetime.fromtimestamp(x))
 
     return dfi
-
-print(export_dataframe())

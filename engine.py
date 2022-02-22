@@ -31,3 +31,5 @@ def export_dataframe():
     dfi["formatted_time"] = dfi["Ts"].apply(lambda x: datetime.datetime.fromtimestamp(x))
 
     return dfi
+
+print(export_dataframe())

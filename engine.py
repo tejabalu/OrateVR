@@ -5,7 +5,6 @@ import pandas as pd
 import firebase_admin
 import datetime
 # import google.cloud
-from firebase_admin import credentials
 from firebase_admin import db
 
 cred_obj = firebase_admin.credentials.Certificate('SAK.json')

@@ -5,7 +5,6 @@ import firebase_admin
 import datetime
 from firebase_admin import db
 from scipy.signal import resample
-from keras.models import load_model
 
 cred_obj = firebase_admin.credentials.Certificate('SAK.json')
 default_app = firebase_admin.initialize_app(cred_obj, {
@@ -84,8 +83,3 @@ def export_heartrate():
         print("Error")
     
     return stack
-
-def machine_learning():
-    stack = export_heartrate()
-    model = load_model('model.h5')
-    return model.predict([[0,0,0,0,0,0,0,0,0]])

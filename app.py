@@ -2,6 +2,7 @@ from dash import Dash
 from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output, State
+# from mlengine import machine_learning
 
 app = Dash(
     __name__,
@@ -143,6 +144,8 @@ def gen_heart_rate(interval):
 def gen_wind_histogram(a, b):
     from engine import export_dataframe
     dfi = export_dataframe()
+    print("test")
+    print(dfi["GSR"])
 
     trace = dict(
         type="scatter",
@@ -152,9 +155,6 @@ def gen_wind_histogram(a, b):
 
     layout = dict(
         height=700,
-        yaxis={
-            "range": [600,700],
-        },
         xaxis={
             "showline": True,
             "zeroline": False,

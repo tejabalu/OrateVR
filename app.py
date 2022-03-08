@@ -144,8 +144,6 @@ def gen_heart_rate(interval):
 def gen_wind_histogram(a, b):
     from engine import export_dataframe
     dfi = export_dataframe()
-    print("test")
-    print(dfi["GSR"])
 
     trace = dict(
         type="scatter",

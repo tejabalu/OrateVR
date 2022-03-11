@@ -2,7 +2,9 @@ from dash import Dash
 from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output, State
-# from mlengine import machine_learning
+import mlengine
+
+print(mlengine.machine_learning())
 
 app = Dash(
     __name__,

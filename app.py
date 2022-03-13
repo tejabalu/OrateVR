@@ -114,7 +114,7 @@ def gen_heart_rate(interval):
     from engine import export_dataframe
     dfi = export_dataframe()
     heartrate = export_heartrate()
-    print(heartrate)
+    print(heartrate)    
 
     trace = dict(
         type="scatter",

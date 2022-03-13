@@ -26,16 +26,9 @@ app.layout = html.Div(
                 ),
                 html.Div(
                     [
-                        html.A(
-                            html.Button("About", className=""),
-                            href="https://plotly.com/get-demo/",
-                        ),
-                        html.A(
-                            html.Img(
-                                src=app.get_asset_url(""),
-                                className="",
-                            ),
-                            href="https://plotly.com/dash/",
+                        html.Img(
+                            src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
+                            className="",
                         ),
                     ],
                     className="",
@@ -114,12 +107,11 @@ def gen_heart_rate(interval):
     from engine import export_dataframe
     dfi = export_dataframe()
     heartrate = export_heartrate()
-    print(heartrate)    
+    # print(heartrate)    
 
     trace = dict(
         type="scatter",
         y=dfi["PPG"],
-        # y=[1,2,3,4,5],
         hoverinfo="skip",
         mode="lines",
     )

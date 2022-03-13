@@ -1,9 +1,15 @@
 from keras.models import load_model
-# from engine import export_heartrate
 
 model = load_model('model.h5')
-def machine_learning():
-    # stack = export_heartrate()
-    return model.predict([[0,0,0,0,0,0,0,0,0]])
-
-print(machine_learning())
+def machine_learning(stack):
+	stress_condition = "Stress levels not found"
+	result = model.predict(stack)
+	result = result.tolist()
+	index = result.index(max(result))
+	if index == 0:
+		stress_condition = "Distracted"
+	elif index == 1:
+		stress_condition = "Stressed"
+	elif index == 2:
+		stress_condition = "Normal"
+	return stress_condition

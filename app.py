@@ -2,9 +2,8 @@ from dash import Dash
 from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output, State
-import mlengine
 
-print(mlengine.machine_learning())
+from engine import export_heartrate
 
 app = Dash(
     __name__,
@@ -63,7 +62,7 @@ app.layout = html.Div(
                         dcc.Interval(
                             id="heart-rate-update",
                             interval=4000,
-                            n_intervals=0,
+                            n_intervals=1000,
                         ),
                     ],
                     className="",
@@ -108,12 +107,14 @@ app.layout = html.Div(
 )
 def gen_heart_rate(interval):
     """
-    Generate the wind speed graph.
+    Generate the heart rate graph.
 
     :params interval: update the graph based on an interval
     """
     from engine import export_dataframe
     dfi = export_dataframe()
+    heartrate = export_heartrate()
+    print(heartrate)
 
     trace = dict(
         type="scatter",

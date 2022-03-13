@@ -27,7 +27,7 @@ app.layout = html.Div(
                 html.Div(
                     [
                         html.Img(
-                            src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
+                            src="https://raw.githubusercontent.com/tejabalu/OrateVR/master/assets/Artboard%201%401.5x.png",
                             className="",
                         ),
                     ],

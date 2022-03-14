@@ -10,7 +10,7 @@ app = Dash(
     __name__,
     meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}], external_scripts=external_script,
 )
-app.title = "ORateVR Dashboard"
+app.title = "OrateVR Dashboard"
 server = app.server
 
 app_color = {"graph_bg": "#082255", "graph_line": "#007ACE"}
@@ -50,7 +50,7 @@ app.layout = html.Div(
                             [html.H6("PPG (heart rate) Sensor Readings", className="h2 py-2 text-2xl text-gray-800 pl-4")],
                         ),
                         dcc.Graph(
-                            id="heart-rate-graph",
+                            id="heart-rate",
                             figure=dict(
                                 layout=dict(
                                     plot_bgcolor=app_color["graph_bg"],
@@ -61,7 +61,7 @@ app.layout = html.Div(
                         dcc.Interval(
                             id="heart-rate-update",
                             interval=4000,
-                            n_intervals=1000,
+                            n_intervals=0,
                         ),
                     ],
                     className="w-1/2 h-full m-4 bg-white shadow-2xl",
@@ -132,9 +132,9 @@ app.layout = html.Div(
 # bg-gray-100
 
 @app.callback(
-    Output("heart-rate-graph", "figure"), [Input("heart-rate-update", "n_intervals")]
+    Output("heart-rate", "figure"), [Input("heart-rate-update", "n_intervals")]
 )
-def gen_heart_rate( n ):
+def gen_heart_rate( interval ):
     """
     Generate the heart rate graph.
 
@@ -143,8 +143,12 @@ def gen_heart_rate( n ):
     global heart_rate
     from engine import export_dataframe
     dfi = export_dataframe()
-    heart_rate = (export_heartrate()[0][4]*10)//10
-    print(heart_rate)
+    try:
+        heart_rate = (export_heartrate()[0][4]*10)//10
+        print(heart_rate)
+    except:
+        pass
+
 
     trace = dict(
         type="scatter",
@@ -169,7 +173,7 @@ def gen_heart_rate( n ):
     Output("gsr-reading-graph", "figure"),
     [Input("heart-rate-update", "n_intervals")],
     [
-        State("heart-rate-graph", "figure"),
+        State("heart-rate", "figure"),
     ],
 )
 def gen_wind_histogram( a,b):
@@ -194,9 +198,6 @@ def gen_wind_histogram( a,b):
 
     return dict(data=[trace], layout=layout)
 
-# @app.callback(
-#     Output("heart_rate", "figure"),
-# )
 
 if __name__ == "__main__":
     app.run_server(debug=True)

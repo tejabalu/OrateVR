@@ -33,7 +33,10 @@ def export_dataframe():
     df.GSR = df.GSR.astype(int)
     df.Time = df.Time.astype(int)
     df["Formatted Time"] = df["Time"].apply(lambda x: datetime.datetime.fromtimestamp(x))
-    
+
+    # only get the last 1000 data points
+    df = df.iloc[-1500:]
+
     return df
 
 def export_heartrate():
@@ -52,6 +55,7 @@ def export_heartrate():
     df.GSR = df.GSR.astype(int)
     df.Time = df.Time.astype(int)
     df["Formatted Time"] = df["Time"].apply(lambda x: datetime.datetime.fromtimestamp(x))
+    df = df.iloc[-300:]
     
     timer = df["Formatted Time"]
     datah = df["PPG"]
@@ -67,13 +71,13 @@ def export_heartrate():
     filtered = hp.filter_signal(datah, [0.7, 3.5], sample_rate=sample_rate, 
                             order=3, filtertype='bandpass')
     
-    resampled = resample(filtered, len(filtered)*20)
-    new_sample_rate = sample_rate * 20
+    resampled = resample(filtered, len(filtered)*10)
+    new_sample_rate = sample_rate * 10
     print("new sample rate: ", new_sample_rate, "sample rate: ", sample_rate)
     
     stack = []
     try:
-        wd, m = hp.process(resampled[-int(10*new_sample_rate):], sample_rate = new_sample_rate, 
+        wd, m = hp.process(resampled, sample_rate = new_sample_rate, 
                         high_precision=False, clean_rr=False)
         
         # print(m["bpm"])
@@ -86,6 +90,8 @@ def export_heartrate():
         stress_condition = stress_condition_update([stack])
     except:
         print("Error HR")
+        heart_rate = 0
+        heart_rate_update(heart_rate)
         stress_condition = "Stress levels not found"
     
     return [stack, stress_condition]

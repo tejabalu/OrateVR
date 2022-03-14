@@ -15,7 +15,9 @@ server = app.server
 
 app_color = {"graph_bg": "#082255", "graph_line": "#007ACE"}
 
-heart_rate = 0;
+heart_rate = "N/A";
+stress_condition = "N/A";
+
 
 app.layout = html.Div(
     [
@@ -32,7 +34,7 @@ app.layout = html.Div(
                     html.Div(
                         [
                             html.H2("OrateVR Realtime Dashboard", className="h2 block py-2 font-bold text-3xl text-gray-800"),
-                            html.P("Done as part of Hardware-Software Lab...", className="text-lg text-gray-600"),
+                            html.P("Dashboard displaying speech session information.", className="text-lg text-gray-600"),
                         ],
                         className="flex-none w-1/3 text-right",
                     ),
@@ -64,7 +66,7 @@ app.layout = html.Div(
                             n_intervals=0,
                         ),
                     ],
-                    className="w-1/2 h-full m-4 bg-white shadow-2xl",
+                    className="w-full h-full m-4 bg-white shadow-2xl",
                 ),
                 html.Div(
                     [
@@ -87,10 +89,10 @@ app.layout = html.Div(
                             ],
                         ),
                     ],
-                    className="w-1/2 h-full m-4 bg-white shadow-2xl",
+                    className="w-full h-full m-4 bg-white shadow-2xl",
                 ),
             ],
-            className="flex width-full",
+            className="flex flex-col width-full",
         ),
         html.Div(
             [
@@ -101,7 +103,7 @@ app.layout = html.Div(
                         ),
                         html.Div(
                             [
-                                html.H6(heart_rate, className="grow text-[120px] font-medium text-gray-600 block  text-center"),
+                                html.H6(id='my-output', className="grow text-[120px] font-medium text-gray-600 block  text-center"),
                                 html.H6("Beats per minute", className="grow text-lg font-medium text-gray-600 block text-center"),
                             ]
                         ),
@@ -111,22 +113,21 @@ app.layout = html.Div(
                 html.Div(
                     [
                         html.Div(
+                            [html.H6("Stress Condition", className="flex-none h2 py-2 text-2xl text-gray-800")],
+                        ),
+                        html.Div(
                             [
-                                html.Div(
-                                    [
-                                        html.H6("Stress Levels", className="h2 py-2 text-2xl text-gray-800 pt-auto",)
-                                    ],
-                                ),
-                            ],
+                                html.H6(id='my-output-stress', className="grow text-[50px] font-medium text-gray-600 block text-center mt-16"),
+                            ]
                         ),
                     ],
-                    className="grow items-center p-4 bg-white shadow-2xl m-4",
+                    className="flex flex-col w-1/4 h-full p-4 m-4 bg-white shadow-2xl",
                 ),
             ],
-            className="flex width-full",
+            className="flex width-full place-content-center h-[20rem] m-4",
         ),
     ],
-    className="container mx-auto mt-4",
+    className="container mx-auto pb-8 mt-4",
 )
 
 # bg-gray-100
@@ -141,11 +142,13 @@ def gen_heart_rate( interval ):
     :params interval: update the graph based on an interval
     """
     global heart_rate
+    global stress_condition
     from engine import export_dataframe
     dfi = export_dataframe()
     try:
         heart_rate = (export_heartrate()[0][4]*10)//10
-        print(heart_rate)
+        stress_condition = export_heartrate()[1]
+        print(heart_rate, stress_condition)
     except:
         pass
 
@@ -198,6 +201,19 @@ def gen_wind_histogram( a,b):
 
     return dict(data=[trace], layout=layout)
 
+@app.callback(
+    Output(component_id="my-output", component_property="children"),
+    [Input("heart-rate-update", "n_intervals")],
+)
+def update_heartrate_div(interval):
+    return heart_rate
+
+@app.callback(
+    Output(component_id="my-output-stress", component_property="children"),
+    [Input("heart-rate-update", "n_intervals")],
+)
+def update_stress_condition_div(interval):
+    return stress_condition
 
 if __name__ == "__main__":
     app.run_server(debug=True)

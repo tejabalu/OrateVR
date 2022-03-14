@@ -35,7 +35,7 @@ def export_dataframe():
     df["Formatted Time"] = df["Time"].apply(lambda x: datetime.datetime.fromtimestamp(x))
 
     # only get the last 1000 data points
-    df = df.iloc[-1500:]
+    df = df.iloc[-1000:]
 
     return df
 

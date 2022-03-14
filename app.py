@@ -10,7 +10,7 @@ app = Dash(
     __name__,
     meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}], external_scripts=external_script,
 )
-app.title = "Reality-Rewired Dashboard"
+app.title = "ORateVR Dashboard"
 server = app.server
 
 app_color = {"graph_bg": "#082255", "graph_line": "#007ACE"}

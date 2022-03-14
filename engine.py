@@ -29,7 +29,6 @@ def export_dataframe():
     
     df = pd.DataFrame(fulllist)
     df.columns = ['Time', 'PPG', 'GSR']
-    # convert all values to int
     df.PPG = df.PPG.astype(int)
     df.GSR = df.GSR.astype(int)
     df.Time = df.Time.astype(int)
@@ -49,7 +48,6 @@ def export_heartrate():
     
     df = pd.DataFrame(fulllist)
     df.columns = ['Time', 'PPG', 'GSR']
-    # convert all values to int
     df.PPG = df.PPG.astype(int)
     df.GSR = df.GSR.astype(int)
     df.Time = df.Time.astype(int)
@@ -69,9 +67,9 @@ def export_heartrate():
     filtered = hp.filter_signal(datah, [0.7, 3.5], sample_rate=sample_rate, 
                             order=3, filtertype='bandpass')
     
-    resampled = resample(filtered, len(filtered)*10)
-    new_sample_rate = sample_rate * 10
-    # print("new sample rate: ", new_sample_rate)
+    resampled = resample(filtered, len(filtered)*20)
+    new_sample_rate = sample_rate * 20
+    print("new sample rate: ", new_sample_rate, "sample rate: ", sample_rate)
     
     stack = []
     try:
@@ -82,12 +80,12 @@ def export_heartrate():
         # print(type(m))
         stack = [m["breathingrate"], m["sdnn"], m["rmssd"], m["sdsd"], m["bpm"], m["pnn20"], m["pnn50"], m["sd1"], m["sd2"]]
         stack = [0 if math.isnan(x) else x for x in stack]
-        # print(stack)
+        print(stack, "heart rate analysis successful")
         heart_rate = m["bpm"]
         heart_rate_update(heart_rate)
         stress_condition = stress_condition_update([stack])
     except:
-        # print("Error HR")
+        print("Error HR")
         stress_condition = "Stress levels not found"
     
     return [stack, stress_condition]
@@ -96,10 +94,10 @@ def stress_condition_update(stack):
     stress_condition = machine_learning(stack)
     try:
         ref1.child(path='Stress Condition').set(stress_condition)
-        # print("Stress Condition Updated")
+        print("Stress Condition Updated")
     except:
         ref1.child(path='Stress Condition').set("Stress levels not found")
-        # print("Stress Condition not updated")
+        print("Stress Condition not updated")
     
     return stress_condition
 
@@ -107,10 +105,11 @@ def heart_rate_update(bpm):
     try:
         bpm = int(bpm)
         # round to nearest ones place
-        bpm = (bpm*10)/10
+        bpm = (bpm*10)//10
         # print(bpm)
         ref1.child(path='Heart Rate').set(bpm)
-        # print("Heart Rate Updated")
+        print("Heart Rate Updated")
     except:
         ref1.child(path='Heart Rate').set("Heart Rate not found")
-        # print("Heart rate not updated")
+        print("Heart rate not updated")
+    return bpm
